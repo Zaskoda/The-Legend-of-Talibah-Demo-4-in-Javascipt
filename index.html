@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talibah Demo 4</title>
+<!-- Link previews (Open Graph / Twitter).  The URLs must be absolute: change
+     SITE below if the GitHub Pages address is different. -->
+<meta name="description" content="The Legend of Talibah Demo 4 (Zaskoda Soft, 1997), a DOS RPG demo playable in the browser: the boat to Nilta, eight maps, the original music and sound.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Zaskoda Soft">
+<meta property="og:title" content="The Legend of Talibah: Demo 4">
+<meta property="og:description" content="Zaskoda Soft's 1997 DOS RPG demo, playable in the browser, with its original music and sound.">
+<meta property="og:url" content="https://zaskoda.github.io/taldemo4/">
+<meta property="og:image" content="https://zaskoda.github.io/taldemo4/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Legend of Talibah title screen: a robed figure holding a green orb beside a carved staff, with 'Chapter 1: A Past Forgotten'.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Legend of Talibah: Demo 4">
+<meta name="twitter:description" content="Zaskoda Soft's 1997 DOS RPG demo, playable in the browser, with its original music and sound.">
+<meta name="twitter:image" content="https://zaskoda.github.io/taldemo4/preview.png">
+<meta name="theme-color" content="#0d0f0d">
+<style>
+:root {
+  --bg: #0d0f0d; --panel: #161a16; --ink: #cfd8c8; --dim: #8a957f; --line: #2b332a; --accent: #7fbf6a;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 980px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 18px; font-weight: 600; margin: 4px 0 12px; letter-spacing: .02em; }
+h1 small { color: var(--dim); font-weight: 400; }
+#screenwrap { position: relative; width: 100%; aspect-ratio: 4 / 3; background: #000;
+  display: flex; align-items: center; justify-content: center; }
+#screenwrap.square { aspect-ratio: 8 / 5; }
+#screen { width: 100%; height: 100%; display: block; outline: none; image-rendering: pixelated; }
+#screenwrap:fullscreen { aspect-ratio: auto; width: 100vw; height: 100vh; }
+#screenwrap:fullscreen #screen { width: min(100vw, 133.333vh); height: min(75vw, 100vh); }
+#screenwrap.square:fullscreen #screen { width: min(100vw, 160vh); height: min(62.5vw, 100vh); }
+#gate { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center; color: var(--ink); background: rgba(0,0,0,.6);
+  font-size: 18px; cursor: pointer; }
+#gate[hidden] { display: none; }
+#gate small { color: var(--dim); font-size: 13px; margin-top: 6px; }
+#status { min-height: 1.4em; color: var(--dim); margin: 6px 0; }
+.bar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; }
+.bar label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+button { font: inherit; color: var(--ink); background: #222a21; border: 1px solid #3a4638;
+  border-radius: 4px; padding: 5px 12px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button.primary { background: #2c4426; border-color: #4d7343; }
+.spacer { flex: 1; }
+details { margin-top: 12px; color: var(--dim); }
+details summary { cursor: pointer; color: var(--ink); }
+kbd { font: 12px ui-monospace, monospace; background: #222a21; border: 1px solid #3a4638;
+  border-radius: 3px; padding: 0 4px; color: var(--ink); }
+table { border-collapse: collapse; margin: 6px 0; }
+td { padding: 2px 12px 2px 0; vertical-align: top; }
+@media (max-width: 600px) { main { padding: 16px 16px; } }
+</style>
+<!--SCRIPTS-->
+<script src="src/vgafont.js"></script>
+<script src="src/sys.js"></script>
+<script src="src/vga.js"></script>
+<script src="src/data.js"></script>
+<script src="src/sound.js"></script>
+<script src="src/crt.js"></script>
+<script src="src/graphics.js"></script>
+<script src="src/vars.js"></script>
+<script src="src/fonts.js"></script>
+<script src="src/bitmaps.js"></script>
+<script src="src/mensys.js"></script>
+<script src="src/main.js"></script>
+<script src="src/page.js"></script>
+<!--/SCRIPTS-->
+</head>
+<body>
+<main>
+  <h1>The Legend of Talibah <small>· Zaskoda Soft · Demo 4 (November 1997) on the 1999 engine</small></h1>
+  <div id="screenwrap"><canvas id="screen" tabindex="0" width="1280" height="800"></canvas>
+    <div id="gate" hidden>Click or press a key to start<br><small>the browser plays sound only after that</small></div></div>
+  <div id="status"></div>
+  <div class="bar">
+    <label><input type="checkbox" id="opt-sound" checked> Sound and music <span style="color:var(--dim)">(SOUNDSET.EXE)</span></label>
+    <label><input type="checkbox" id="opt-joy" checked> Joystick / gamepad</label>
+    <label><input type="checkbox" id="opt-43" checked> 4:3 picture, as on a CRT</label>
+    <span class="spacer"></span>
+    <button id="btn-full" title="Full screen (F)">Full screen</button>
+    <button id="btn-play" class="primary">Play with these settings</button>
+  </div>
+  <details>
+    <summary>Controls</summary>
+    <table>
+      <tr><td><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> or number pad</td><td>Walk, move through menus</td></tr>
+      <tr><td><kbd>Enter</kbd></td><td>Choose; talk to the person in front of you</td></tr>
+      <tr><td><kbd>*</kbd> on the number pad (or <kbd>Shift</kbd>+<kbd>8</kbd>)</td><td>The game menu</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Back out; quit</td></tr>
+      <tr><td><kbd>R</kbd> / <kbd>T</kbd></td><td>Debug: rain on / off</td></tr>
+      <tr><td><kbd>M</kbd> / <kbd>N</kbd></td><td>Debug: mini map on / off</td></tr>
+      <tr><td><kbd>Q</kbd><kbd>W</kbd><kbd>E</kbd> / <kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></td><td>Debug: turn party members 1, 2, 3 on / off</td></tr>
+      <tr><td><kbd>F</kbd></td><td>Full screen</td></tr>
+      <tr><td>Gamepad</td><td>Stick or d-pad to move; A = button 1 (choose, talk), B or Start = button 2 (menu), Y or Back = button 4 (Esc)</td></tr>
+    </table>
+  </details>
+</main>
+</body>
+</html>
