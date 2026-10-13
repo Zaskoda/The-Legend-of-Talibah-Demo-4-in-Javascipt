@@ -1,4 +1,147 @@
-# The Legend of Talibah: Demo 4, on the 1999 engine
+# The Legend of Talibah: Demo 4
+
+* **Play it in your browser:** <https://zaskoda.github.io/The-Legend-of-Talibah-Demo-4-in-Javascipt/>
+* **Source:** <https://github.com/zaskoda/The-Legend-of-Talibah-Demo-4-in-Javascipt>
+
+![The Legend of Talibah title screen](preview.png)
+
+*The Legend of Talibah* is a DOS role-playing game Scott Dudley (Zaskoda Soft) worked on
+from 1995 to 1999. Demo 4 was released on 30 November 1997. It has a boat trip to the
+town of Nilta, eight small maps to walk around, townspeople to talk to, and music and
+sound effects for a Sound Blaster. The game was never finished.
+
+This repository runs Demo 4 in a web browser, in JavaScript. It uses the demo's own
+maps, pictures, text, music and sounds, unchanged. The character sprites and overworld
+tiles come from the 1999 files.
+
+## How it was made
+
+Demo 4's source code is lost; only the program, `MAIN.EXE`, survived. The game's logic
+was read from that program, with the help of `LAB.PAS` (29 November 1997, the nearest
+surviving source file) for the names and the shape of the code.
+
+Walking around uses the engine from the game's later June 1999 source, which had
+already been ported to JavaScript:
+
+* a larger 220×200 view;
+* characters cut off at the waist in trees and shallow water;
+* hills;
+* the party walking in single file;
+* the 1999 character sprites, which have shadows;
+* the 1999 overworld tiles.
+
+Everything else is Demo 4 as the program does it: the screens, menus, story, boat
+trip, music and sound and their timing.
+
+The rest of this file has the original 1997 README, then technical notes on the port.
+
+## The original README (1997)
+
+This is the `README.TXT` that came with the demo, unchanged. The keys, sound card and
+contact details are from 1997; for playing in the browser, see
+[Controls](#controls) below.
+
+```
+Greetings!
+
+Gosh am I tired. I've wasted my entire holiday working on this demo..
+Ok, so I did stop to have the tradition thanksgiving feast.. twice.. 
+but regardless, I've put a lot of hours into this demo. I hope you 
+enjoy it!
+
+Requirements:
+ Dos/Win95
+ 386 (486dx or faster suggested)
+ Sound Blaster compatible required for sound and music
+ Control Pad/Joy Stick required for full effect ;)
+
+Sounds:
+ Just a handful of bells and whistles.. not much at all.
+
+Music:
+ This small demo has some snippets of music in it.. They can get a bit
+repatative after a while. You can turn them off in soundset.exe... The
+music is the reason for the rather large file size. I was going to make
+the music an optional download, but I've run out of time. I'm trying to
+get some documentation down and get this demo out the door before the 
+end of the day as it is. Anyway, the music is there and it give a 
+pretty good idea of what the game might be like with the CD music in
+place. Keep in mind the fact that the music has been resampled into
+very low quality.
+
+Bugs:
+ -The sound is very scratchy on some sound cards. The static isn't in
+  the samples.. they were clean..
+ -Speed control issues.. For some reason the text scroll speed doesn't
+  want to stay consistant. I don't have time to hunt it down but I 
+  suspect that its in the timing library and out of my control =(
+ -Rain in houses. Yes, the rain is still a functional debug key in this
+  demo and yes, it still rains when you enter a house.. I never 
+  considered this a bug because the rain isn't a feature of the demo,
+  but I'm sure I'll hear about it.
+
+Keys:
+ The controls are very simple in TLOT.. You'll prolly figure it out 
+ without having to read any of this text...
+
+ Normal Keys:
+  <enter> - This is your main key.
+  <space> - Same as enter.
+  *       - The "*" key on the number pad brings up the game menu.
+  <arrows>- They provide you with movement.
+  <esc>   - Generally this is an Exit key.
+
+ Debug Keys:
+  R    - RainOn
+  T    - RainOff
+  M    - MapOn - The minimap willn't be a feature in the final release.
+  N    - MapOff
+  Q,W,E- Turn characters 1,2 and 3 on repectively
+  A,S,D- Turn characters 1,2 and 3 off repectively
+
+ Joystick:
+  Button 1 or Button A is your main button.
+  Button 2 or Button B brings up the game menu.
+  Button 4 or Button D is the Exit key.
+  The Direction pad moves you around..
+
+Greets: (there are so many, please forgive me if I forget you)
+ Aphrodite17
+ InFovEin
+ Lord Chaos
+ Lord Matrix
+ Eric E. Hache
+ Elder Brian Crews
+ #17
+ Takamoto Miura
+ Yakra
+ Wildfire
+ Vito Miliano
+ Nathan Seeley 
+ Ethan Brodsky
+ Nick Pleis
+ Ronny Salomonsen
+ Scott Earnest
+ Guts
+ All my BetaTesters!
+
+Contact:
+ scott@nortexinfo.net
+ http://www.nortexinfo.net/Zaskoda/Talibah
+
+I can't type anymore.. I'm gonna zip this up and put it online...
+```
+
+`FILE_ID.DIZ`:
+
+```
+THE LEGEND OF TALIBAH Chapter 1:A Past Forgotten
+Console Style RPG
+Alpha demo..
+very small
+```
+
+## About this port
 
 A browser version of Zaskoda Soft's **The Legend of Talibah, Demo 4** (30 November 1997,
 "Snazzy Engine (tm) v.01 (pre alpha)"). It plays Demo 4's maps, people, story, music and
@@ -12,14 +155,13 @@ are in `data/` and are not changed.
 
 ## Running it
 
-* **From disk:** open `dist/TALDEMO4.html`. Every script and data file is inside it, so
-  it works from `file://`.
+* **From disk:** run `python3 build.py`, then open `dist/TALDEMO4.html`. Every script
+  and data file is inside it, so it works from `file://`.
 * **Served:** put this folder on any web server (PHP, Apache, `python3 -m http.server`)
   and open `index.html`. It loads `src/*.js` and fetches the files in `data/`.
 * **GitHub Pages:** the repository root works as the site as it is (`index.html`, `src/`,
   `data/`). `index.html` has link-preview tags using `preview.png`; their URLs assume
-  `https://zaskoda.github.io/taldemo4/`, so change them if the address differs.
-* **Rebuild the single file:** `python3 build.py` writes `dist/TALDEMO4.html`.
+  `https://zaskoda.github.io/The-Legend-of-Talibah-Demo-4-in-Javascipt/`, so change them if the address differs.
 
 Browsers won't play sound until the page has been clicked or a key pressed. If that
 hasn't happened yet, the page asks for a click before the program starts, so the
