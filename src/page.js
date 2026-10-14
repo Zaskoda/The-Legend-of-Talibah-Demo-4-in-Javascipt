@@ -129,12 +129,71 @@ function setupPanel() {
   snd.addEventListener('change', focusGame);
 }
 
+
+/* On-screen controls: a d-pad and the three keys the game needs.  They
+   press and release the same scancodes as the keyboard. */
+function setupTouch() {
+  const det = document.getElementById('touch');
+  if (!det) return;
+  try { if (localStorage.getItem('talibah.touch') === '1') det.open = true; } catch (e) {}
+  det.addEventListener('toggle', () => {
+    try { localStorage.setItem('talibah.touch', det.open ? '1' : '0'); } catch (e) {}
+  });
+  const setKey = (code, down) => { sysKeyEvent(code, down); };
+
+  /* d-pad: one area; the direction follows the finger, so you can slide
+     from one arrow to another without lifting */
+  const pad = document.getElementById('dpad');
+  const arrows = { ArrowUp: pad.querySelector('.u'), ArrowDown: pad.querySelector('.d'),
+    ArrowLeft: pad.querySelector('.l'), ArrowRight: pad.querySelector('.r') };
+  let cur = null, padPointer = null;
+  const setDir = (dir) => {
+    if (dir === cur) return;
+    if (cur) { setKey(cur, false); arrows[cur].classList.remove('on'); }
+    cur = dir;
+    if (cur) { setKey(cur, true); arrows[cur].classList.add('on'); }
+  };
+  const dirAt = (e) => {
+    const r = pad.getBoundingClientRect();
+    const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+    if (Math.hypot(dx, dy) < r.width * 0.12) return null;     // dead centre
+    return Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'ArrowLeft' : 'ArrowRight') : (dy < 0 ? 'ArrowUp' : 'ArrowDown');
+  };
+  pad.addEventListener('pointerdown', (e) => {
+    e.preventDefault(); smixResume();
+    padPointer = e.pointerId; pad.setPointerCapture(e.pointerId); setDir(dirAt(e));
+  });
+  pad.addEventListener('pointermove', (e) => { if (e.pointerId === padPointer) setDir(dirAt(e)); });
+  const padUp = (e) => { if (e.pointerId === padPointer) { padPointer = null; setDir(null); } };
+  pad.addEventListener('pointerup', padUp);
+  pad.addEventListener('pointercancel', padUp);
+  pad.addEventListener('lostpointercapture', padUp);
+
+  /* buttons: held while the finger is down */
+  for (const b of document.querySelectorAll('.tbtn')) {
+    const code = b.dataset.key;
+    const up = () => { b.classList.remove('on'); setKey(code, false); };
+    b.addEventListener('pointerdown', (e) => {
+      e.preventDefault(); smixResume();
+      b.setPointerCapture(e.pointerId);
+      b.classList.add('on'); setKey(code, true);
+    });
+    b.addEventListener('pointerup', up);
+    b.addEventListener('pointercancel', up);
+    b.addEventListener('lostpointercapture', up);
+    b.addEventListener('contextmenu', (e) => e.preventDefault());
+    b.addEventListener('click', (e) => e.preventDefault());
+  }
+  pad.addEventListener('contextmenu', (e) => e.preventDefault());
+}
+
 async function boot() {
   const status = document.getElementById('status');
   const canvas = document.getElementById('screen');
   vgaInit(canvas);
   setupInput();
   setupPanel();
+  setupTouch();
   requestAnimationFrame(frame);
   try {
     await loadAllData((n, t) => { status.textContent = 'Loading ' + n + ' / ' + t; });
