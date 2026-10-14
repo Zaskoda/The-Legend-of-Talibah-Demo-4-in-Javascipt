@@ -59,6 +59,25 @@ kbd { font: 12px ui-monospace, monospace; background: #222a21; border: 1px solid
 table { border-collapse: collapse; margin: 6px 0; }
 td { padding: 2px 12px 2px 0; vertical-align: top; }
 @media (max-width: 600px) { main { padding: 16px 16px; } }
+/* on-screen controls for phones and tablets */
+#touch { margin: 0 0 12px; }
+#touch summary { padding: 6px 0; }
+.pad-row { display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  padding: 10px 4px 4px; user-select: none; -webkit-user-select: none; }
+#dpad { position: relative; width: 156px; height: 156px; flex: none; touch-action: none;
+  border-radius: 50%; background: var(--panel); border: 1px solid var(--line); }
+#dpad span { position: absolute; width: 52px; height: 52px; display: flex; align-items: center;
+  justify-content: center; font-size: 20px; color: var(--ink); background: #222a21;
+  border: 1px solid #3a4638; border-radius: 8px; pointer-events: none; }
+#dpad span.on, .tbtn.on { background: #2c4426; border-color: var(--accent); }
+#dpad .u { left: 52px; top: 0; } #dpad .d { left: 52px; bottom: 0; }
+#dpad .l { left: 0; top: 52px; } #dpad .r { right: 0; top: 52px; }
+.tbtns { display: grid; grid-template-columns: repeat(2, 76px); gap: 10px; touch-action: none; }
+.tbtn { height: 64px; border-radius: 12px; font: inherit; font-size: 13px; line-height: 1.2;
+  color: var(--ink); background: #222a21; border: 1px solid #3a4638; touch-action: none;
+  -webkit-tap-highlight-color: transparent; }
+.tbtn b { display: block; font-size: 17px; }
+.tbtn.big { grid-column: span 2; height: 72px; }
 </style>
 <!--SCRIPTS-->
 <script src="src/vgafont.js"></script>
@@ -82,6 +101,19 @@ td { padding: 2px 12px 2px 0; vertical-align: top; }
   <div id="screenwrap"><canvas id="screen" tabindex="0" width="1280" height="800"></canvas>
     <div id="gate" hidden>Click or press a key to start<br><small>the browser plays sound only after that</small></div></div>
   <div id="status"></div>
+  <details id="touch">
+    <summary>On-screen controls (phones and tablets)</summary>
+    <div class="pad-row">
+      <div id="dpad" aria-label="Walk">
+        <span class="u">▲</span><span class="l">◀</span><span class="r">▶</span><span class="d">▼</span>
+      </div>
+      <div class="tbtns">
+        <button class="tbtn big" data-key="Enter"><b>Enter</b>choose · talk</button>
+        <button class="tbtn" data-key="NumpadMultiply"><b>✱</b>menu</button>
+        <button class="tbtn" data-key="Escape"><b>Esc</b>back</button>
+      </div>
+    </div>
+  </details>
   <div class="bar">
     <label><input type="checkbox" id="opt-sound" checked> Sound and music <span style="color:var(--dim)">(SOUNDSET.EXE)</span></label>
     <label><input type="checkbox" id="opt-joy" checked> Joystick / gamepad</label>
